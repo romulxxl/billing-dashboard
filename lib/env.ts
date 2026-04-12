@@ -32,6 +32,14 @@ const envSchema = z.object({
 type Env = z.infer<typeof envSchema>;
 
 function validateEnv(): Env {
+  // During `next build` (NEXT_PHASE = "phase-production-build") the runtime
+  // environment variables are not injected yet — only build-time vars are present.
+  // Skip strict validation here; missing vars will throw at the first runtime
+  // request, not at build time. This allows Vercel builds to succeed even when
+  // env vars are only configured in the deployment environment (not in CI).
+  if (process.env.NEXT_PHASE === "phase-production-build") {
+    return process.env as unknown as Env;
+  }
   const parsed = envSchema.safeParse(process.env);
   if (!parsed.success) {
     console.error("❌ Invalid environment variables:");
