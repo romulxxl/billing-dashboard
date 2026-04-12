@@ -22,7 +22,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={inter.className}>
-      <body className="min-h-screen bg-white antialiased">
+      <body className="min-h-screen bg-white antialiased" suppressHydrationWarning>
         {children}
         <Toaster richColors position="top-right" />
       </body>

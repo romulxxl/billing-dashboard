@@ -14,12 +14,20 @@ export async function GET() {
     );
   }
 
-  const subscription = await db.subscription.findUnique({
-    where: { userId: session.user.id },
-  });
+  try {
+    const subscription = await db.subscription.findUnique({
+      where: { userId: session.user.id },
+    });
 
-  return NextResponse.json<ApiResponse<Subscription | null>>({
-    data: subscription,
-    error: null,
-  });
+    return NextResponse.json<ApiResponse<Subscription | null>>({
+      data: subscription,
+      error: null,
+    });
+  } catch (err) {
+    console.error("[GET /api/subscription]", err);
+    return NextResponse.json<ApiResponse<null>>(
+      { data: null, error: "Failed to fetch subscription" },
+      { status: 500 }
+    );
+  }
 }

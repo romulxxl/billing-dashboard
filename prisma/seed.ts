@@ -10,8 +10,7 @@ const resolvedUrl = dbUrl.startsWith("file:./")
   : dbUrl;
 
 const adapter = new PrismaBetterSqlite3({ url: resolvedUrl });
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const db = new PrismaClient({ adapter } as any);
+const db = new PrismaClient({ adapter } as ConstructorParameters<typeof PrismaClient>[0]);
 
 async function main() {
   console.log("🌱 Seeding database...");

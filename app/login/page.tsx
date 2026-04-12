@@ -5,7 +5,6 @@ import { useRouter } from "next/navigation";
 import { signIn } from "next-auth/react";
 import { toast } from "sonner";
 import { Loader2, Info } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import { SynapseLogo } from "@/components/ui/synapse-logo";
 
 export default function LoginPage() {

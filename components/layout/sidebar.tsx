@@ -4,9 +4,8 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { LayoutDashboard, CreditCard, Settings, LogOut } from "lucide-react";
 import { signOut } from "next-auth/react";
-import { cn } from "@/lib/utils";
+import { cn, getInitials } from "@/lib/utils";
 import { SynapseLogo } from "@/components/ui/synapse-logo";
-import { getInitials } from "@/lib/utils";
 import type { SessionUser } from "@/types";
 
 const navItems = [

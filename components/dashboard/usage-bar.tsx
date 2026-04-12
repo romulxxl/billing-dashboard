@@ -16,8 +16,9 @@ function formatNumber(n: number): string {
 }
 
 export function UsageBar({ label, used, limit, unit = "", className }: UsageBarProps) {
-  const pct = Math.min(Math.round((used / limit) * 100), 100);
-  const isHigh = pct >= 80;
+  const isUnlimited = !isFinite(limit);
+  const pct = isUnlimited || limit === 0 ? 0 : Math.min(Math.round((used / limit) * 100), 100);
+  const isHigh = !isUnlimited && pct >= 80;
 
   return (
     <div className={cn("space-y-2", className)}>
@@ -25,8 +26,7 @@ export function UsageBar({ label, used, limit, unit = "", className }: UsageBarP
         <span className="font-medium text-zinc-700">{label}</span>
         <span className="text-zinc-500">
           {formatNumber(used)}
-          {unit} / {formatNumber(limit)}
-          {unit}
+          {unit} / {isUnlimited ? "∞" : `${formatNumber(limit)}${unit}`}
         </span>
       </div>
       <Progress
@@ -34,8 +34,7 @@ export function UsageBar({ label, used, limit, unit = "", className }: UsageBarP
         className={cn(isHigh && "[&>div]:bg-amber-500")}
       />
       <p className={cn("text-xs", isHigh ? "text-amber-600" : "text-zinc-400")}>
-        {pct}% used
-        {isHigh && " — approaching limit"}
+        {isUnlimited ? "Unlimited" : `${pct}% used${isHigh ? " — approaching limit" : ""}`}
       </p>
     </div>
   );

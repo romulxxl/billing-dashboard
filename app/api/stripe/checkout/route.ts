@@ -41,43 +41,51 @@ export async function POST(req: NextRequest) {
   const { planId, interval } = parsed.data;
   const priceId = getPriceId(planId, interval);
 
-  const user = await db.user.findUnique({ where: { id: session.user.id } });
-  if (!user) {
+  try {
+    const user = await db.user.findUnique({ where: { id: session.user.id } });
+    if (!user) {
+      return NextResponse.json<ApiResponse<null>>(
+        { data: null, error: "User not found" },
+        { status: 404 }
+      );
+    }
+
+    let customerId = user.stripeCustomerId;
+    if (!customerId) {
+      const customer = await stripe.customers.create({
+        email: user.email ?? undefined,
+        name: user.name ?? undefined,
+        metadata: { userId: user.id },
+      });
+      customerId = customer.id;
+      await db.user.update({
+        where: { id: user.id },
+        data: { stripeCustomerId: customerId },
+      });
+    }
+
+    const checkoutSession = await stripe.checkout.sessions.create({
+      customer: customerId,
+      mode: "subscription",
+      payment_method_types: ["card"],
+      line_items: [{ price: priceId, quantity: 1 }],
+      success_url: `${env.NEXT_PUBLIC_APP_URL}/dashboard/billing?success=true`,
+      cancel_url: `${env.NEXT_PUBLIC_APP_URL}/dashboard/billing?canceled=true`,
+      allow_promotion_codes: true,
+      subscription_data: {
+        metadata: { userId: user.id },
+      },
+    });
+
+    return NextResponse.json<ApiResponse<{ url: string }>>({
+      data: { url: checkoutSession.url! },
+      error: null,
+    });
+  } catch (err) {
+    console.error("[POST /api/stripe/checkout]", err);
     return NextResponse.json<ApiResponse<null>>(
-      { data: null, error: "User not found" },
-      { status: 404 }
+      { data: null, error: "Failed to create checkout session" },
+      { status: 500 }
     );
   }
-
-  let customerId = user.stripeCustomerId;
-  if (!customerId) {
-    const customer = await stripe.customers.create({
-      email: user.email ?? undefined,
-      name: user.name ?? undefined,
-      metadata: { userId: user.id },
-    });
-    customerId = customer.id;
-    await db.user.update({
-      where: { id: user.id },
-      data: { stripeCustomerId: customerId },
-    });
-  }
-
-  const checkoutSession = await stripe.checkout.sessions.create({
-    customer: customerId,
-    mode: "subscription",
-    payment_method_types: ["card"],
-    line_items: [{ price: priceId, quantity: 1 }],
-    success_url: `${env.NEXT_PUBLIC_APP_URL}/dashboard/billing?success=true`,
-    cancel_url: `${env.NEXT_PUBLIC_APP_URL}/dashboard/billing?canceled=true`,
-    allow_promotion_codes: true,
-    subscription_data: {
-      metadata: { userId: user.id },
-    },
-  });
-
-  return NextResponse.json<ApiResponse<{ url: string }>>({
-    data: { url: checkoutSession.url! },
-    error: null,
-  });
 }

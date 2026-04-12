@@ -38,5 +38,6 @@ export function getIntervalFromPriceId(priceId: string): Interval {
     if (intervals.month === priceId) return "month";
     if (intervals.year === priceId) return "year";
   }
+  console.warn(`[stripe-server] Unknown priceId "${priceId}" — defaulting interval to "month". Check Stripe price ID env vars.`);
   return "month";
 }

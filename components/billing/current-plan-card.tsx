@@ -7,15 +7,6 @@ import { toast } from "sonner";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { SubscriptionBadge } from "@/components/ui/badge";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
 import { formatCurrency, formatDate } from "@/lib/utils";
 import { getPlanById } from "@/lib/stripe-helpers";
 import type { Subscription } from "@prisma/client";
@@ -23,16 +14,13 @@ import type { Subscription } from "@prisma/client";
 interface CurrentPlanCardProps {
   subscription: Subscription;
   isDemo?: boolean;
-  onAction?: () => void;
 }
 
 export function CurrentPlanCard({
   subscription,
   isDemo,
-  onAction,
 }: CurrentPlanCardProps) {
   const [loading, setLoading] = useState(false);
-  const [cancelOpen, setCancelOpen] = useState(false);
   const plan = getPlanById(subscription.plan);
 
   const monthlyPrice =
@@ -114,7 +102,7 @@ export function CurrentPlanCard({
             onClick={openPortal}
             disabled={loading}
           >
-            {loading && <Loader2 className="h-3.5 w-3.5 animate-spin" />}
+            {loading && <Loader2 className="mr-2 h-3.5 w-3.5 animate-spin" />}
             Manage in Stripe Portal
           </Button>
         </div>

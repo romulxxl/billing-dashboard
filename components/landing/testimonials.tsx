@@ -66,7 +66,7 @@ export function Testimonials() {
                 className="mb-4 text-5xl font-serif leading-none select-none"
                 style={{ color: accent, opacity: 0.4 }}
               >
-                "
+                &ldquo;
               </div>
               <p className="text-sm leading-relaxed mb-6" style={{ color: "#93c5fd" }}>
                 {quote}

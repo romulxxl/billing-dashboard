@@ -23,21 +23,29 @@ export async function POST() {
     );
   }
 
-  const user = await db.user.findUnique({ where: { id: session.user.id } });
-  if (!user?.stripeCustomerId) {
+  try {
+    const user = await db.user.findUnique({ where: { id: session.user.id } });
+    if (!user?.stripeCustomerId) {
+      return NextResponse.json<ApiResponse<null>>(
+        { data: null, error: "No Stripe customer found" },
+        { status: 404 }
+      );
+    }
+
+    const portalSession = await stripe.billingPortal.sessions.create({
+      customer: user.stripeCustomerId,
+      return_url: `${env.NEXT_PUBLIC_APP_URL}/dashboard/billing`,
+    });
+
+    return NextResponse.json<ApiResponse<{ url: string }>>({
+      data: { url: portalSession.url },
+      error: null,
+    });
+  } catch (err) {
+    console.error("[POST /api/stripe/portal]", err);
     return NextResponse.json<ApiResponse<null>>(
-      { data: null, error: "No Stripe customer found" },
-      { status: 404 }
+      { data: null, error: "Failed to create portal session" },
+      { status: 500 }
     );
   }
-
-  const portalSession = await stripe.billingPortal.sessions.create({
-    customer: user.stripeCustomerId,
-    return_url: `${env.NEXT_PUBLIC_APP_URL}/dashboard/billing`,
-  });
-
-  return NextResponse.json<ApiResponse<{ url: string }>>({
-    data: { url: portalSession.url },
-    error: null,
-  });
 }

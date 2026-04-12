@@ -36,11 +36,10 @@ export default async function DashboardPage() {
   // Fake realistic usage stats for demo appeal
   const usageStats = {
     events: { used: 312_500, limit: subscription?.plan === "starter" ? 10_000 : subscription?.plan === "pro" ? 500_000 : 10_000_000 },
-    teamMembers: { used: 8, limit: subscription?.plan === "starter" ? 5 : subscription?.plan === "pro" ? 25 : 9999 },
-    projects: { used: subscription?.plan === "starter" ? 2 : 7, limit: subscription?.plan === "starter" ? 3 : 9999 },
+    teamMembers: { used: 8, limit: subscription?.plan === "starter" ? 5 : subscription?.plan === "pro" ? 25 : Infinity },
+    projects: { used: subscription?.plan === "starter" ? 2 : 7, limit: subscription?.plan === "starter" ? 3 : Infinity },
   };
 
-  const totalSpend = invoices.reduce((sum, inv) => sum + inv.amountPaid, 0);
   const monthlyAmount = subscription?.interval === "month"
     ? (plan?.monthlyPrice ?? 0)
     : (plan?.annualPrice ?? 0);
@@ -90,7 +89,7 @@ export default async function DashboardPage() {
         <StatCard
           title="Events This Month"
           value="312.5k"
-          description={`of ${subscription?.plan === "pro" ? "500k" : "10k"} limit`}
+          description={`of ${usageStats.events.limit >= 1_000_000 ? `${usageStats.events.limit / 1_000_000}M` : `${usageStats.events.limit / 1_000}k`} limit`}
           icon={Zap}
           trend={{ value: 24, label: "vs last month" }}
         />
@@ -117,8 +116,7 @@ export default async function DashboardPage() {
             <UsageBar
               label="Projects"
               used={usageStats.projects.used}
-              limit={usageStats.projects.limit === 9999 ? 100 : usageStats.projects.limit}
-              unit={usageStats.projects.limit === 9999 ? " (unlimited)" : ""}
+              limit={usageStats.projects.limit}
             />
           </CardContent>
         </Card>
