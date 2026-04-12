@@ -37,7 +37,8 @@ export function CurrentPlanCard({
     try {
       const res = await fetch("/api/stripe/portal", { method: "POST" });
       const json = await res.json();
-      if (json.error) throw new Error(json.error);
+      if (!res.ok || json.error) throw new Error(json.error ?? "Failed to open portal");
+      if (!json.data?.url) throw new Error("Invalid portal response");
       window.location.href = json.data.url;
     } catch {
       toast.error("Failed to open billing portal.");

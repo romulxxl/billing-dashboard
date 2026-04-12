@@ -35,6 +35,7 @@ export function PlanCard({ plan, interval, currentPlanId, isDemo }: PlanCardProp
       });
       const json = await res.json();
       if (!res.ok || json.error) throw new Error(json.error ?? "Checkout failed");
+      if (!json.data?.url) throw new Error("Invalid checkout response");
       window.location.href = json.data.url;
     } catch {
       toast.error("Failed to start checkout. Please try again.");

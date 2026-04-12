@@ -3,14 +3,20 @@ import { PrismaAdapter } from "@auth/prisma-adapter";
 import GitHub from "next-auth/providers/github";
 import { db } from "@/lib/db";
 
+// Only register GitHub provider when credentials are configured.
+// Without this guard the provider is registered with empty strings and
+// throws a cryptic OAuth error when the user clicks "Continue with GitHub".
+const githubProvider =
+  process.env.GITHUB_CLIENT_ID && process.env.GITHUB_CLIENT_SECRET
+    ? [GitHub({
+        clientId: process.env.GITHUB_CLIENT_ID,
+        clientSecret: process.env.GITHUB_CLIENT_SECRET,
+      })]
+    : [];
+
 export const { handlers, auth, signIn, signOut } = NextAuth({
   adapter: PrismaAdapter(db),
-  providers: [
-    GitHub({
-      clientId: process.env.GITHUB_CLIENT_ID ?? "",
-      clientSecret: process.env.GITHUB_CLIENT_SECRET ?? "",
-    }),
-  ],
+  providers: githubProvider,
   session: {
     strategy: "database",
   },

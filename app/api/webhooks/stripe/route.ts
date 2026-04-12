@@ -32,7 +32,16 @@ export async function POST(req: NextRequest) {
         const checkoutSession = event.data.object as Stripe.Checkout.Session;
         if (checkoutSession.mode !== "subscription") break;
 
-        const subscriptionId = checkoutSession.subscription as string;
+        const subscriptionId =
+          typeof checkoutSession.subscription === "string"
+            ? checkoutSession.subscription
+            : checkoutSession.subscription?.id;
+
+        if (!subscriptionId) {
+          console.error("checkout.session.completed: missing subscription ID");
+          break;
+        }
+
         const subscription = await stripe.subscriptions.retrieve(subscriptionId);
         const userId = subscription.metadata.userId;
 
@@ -104,6 +113,9 @@ export async function POST(req: NextRequest) {
         });
 
         const lines = invoice.lines.data;
+        if (!lines[0]?.period.start || !lines[0]?.period.end) {
+          console.warn(`[webhook] invoice.payment_succeeded: invoice ${invoice.id} has no line period data`);
+        }
         const periodStart = lines[0]?.period.start
           ? new Date(lines[0].period.start * 1000)
           : new Date();

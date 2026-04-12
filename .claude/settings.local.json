@@ -22,7 +22,10 @@
       "Bash(vercel link:*)",
       "Bash(vercel env:*)",
       "Bash(vercel:*)",
-      "Bash(curl:*)"
+      "Bash(curl:*)",
+      "Bash(ls -la /c/Users/gravi/synapse-billing/*.ts)",
+      "Bash(grep:*)",
+      "Bash(xargs ls:*)"
     ]
   }
 }

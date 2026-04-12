@@ -85,8 +85,15 @@ export async function POST(req: NextRequest) {
       },
     });
 
+    if (!checkoutSession.url) {
+      return NextResponse.json<ApiResponse<null>>(
+        { data: null, error: "Stripe returned no checkout URL" },
+        { status: 500 }
+      );
+    }
+
     return NextResponse.json<ApiResponse<{ url: string }>>({
-      data: { url: checkoutSession.url! },
+      data: { url: checkoutSession.url },
       error: null,
     });
   } catch (err) {

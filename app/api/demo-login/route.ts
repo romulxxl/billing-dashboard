@@ -19,13 +19,21 @@ export async function POST() {
   const expires = new Date(Date.now() + 24 * 60 * 60 * 1000);
   const sessionToken = crypto.randomUUID();
 
-  await db.session.create({
-    data: {
-      sessionToken,
-      userId: demoUser.id,
-      expires,
-    },
-  });
+  try {
+    await db.session.create({
+      data: {
+        sessionToken,
+        userId: demoUser.id,
+        expires,
+      },
+    });
+  } catch (err) {
+    console.error("[POST /api/demo-login] Failed to create session:", err instanceof Error ? err.message : err);
+    return NextResponse.json(
+      { data: null, error: "Failed to create demo session" },
+      { status: 500 }
+    );
+  }
 
   const response = NextResponse.json({ data: { ok: true }, error: null });
 
