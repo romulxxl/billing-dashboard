@@ -46,7 +46,7 @@ export function Footer() {
           className="mt-14 border-t pt-8 flex flex-col sm:flex-row items-center justify-between gap-4"
           style={{ borderColor: "rgba(22,48,96,0.4)" }}
         >
-          <p className="text-sm text-navy-500">© 2025 Synapse, Inc. All rights reserved.</p>
+          <p className="text-sm text-navy-500">© {new Date().getFullYear()} Synapse, Inc. All rights reserved.</p>
           <p className="text-sm text-navy-500">Built with Next.js · Hosted on Vercel</p>
         </div>
       </div>

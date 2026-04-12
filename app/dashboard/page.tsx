@@ -34,10 +34,15 @@ export default async function DashboardPage() {
   const plan = subscription ? getPlanById(subscription.plan) : null;
 
   // Fake realistic usage stats for demo appeal
+  const plan_id = subscription?.plan ?? "starter";
+  const eventLimits:       Record<string, number> = { starter: 10_000,  pro: 500_000, enterprise: 10_000_000 };
+  const memberLimits:      Record<string, number> = { starter: 5,       pro: 25,      enterprise: Infinity    };
+  const projectLimits:     Record<string, number> = { starter: 3,       pro: Infinity, enterprise: Infinity   };
+  const projectsUsed:      Record<string, number> = { starter: 2,       pro: 7,        enterprise: 7          };
   const usageStats = {
-    events: { used: 312_500, limit: subscription?.plan === "starter" ? 10_000 : subscription?.plan === "pro" ? 500_000 : 10_000_000 },
-    teamMembers: { used: 8, limit: subscription?.plan === "starter" ? 5 : subscription?.plan === "pro" ? 25 : Infinity },
-    projects: { used: subscription?.plan === "starter" ? 2 : 7, limit: subscription?.plan === "starter" ? 3 : Infinity },
+    events:      { used: 312_500, limit: eventLimits[plan_id]   ?? 10_000 },
+    teamMembers: { used: 8,       limit: memberLimits[plan_id]  ?? 5      },
+    projects:    { used: projectsUsed[plan_id] ?? 2, limit: projectLimits[plan_id] ?? 3 },
   };
 
   const monthlyAmount = subscription?.interval === "month"

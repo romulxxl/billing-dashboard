@@ -12,12 +12,12 @@ export default async function DashboardLayout({
 }) {
   const session = await auth();
 
-  if (!session?.user) {
+  if (!session?.user?.id) {
     redirect("/login");
   }
 
   const user: SessionUser = {
-    id: session.user.id ?? "",
+    id: session.user.id,
     name: session.user.name,
     email: session.user.email,
     image: session.user.image,

@@ -35,8 +35,8 @@ export default function SettingsPage() {
 
   async function handleDelete() {
     if (isDemo) {
-      toast.warning("Cannot delete the demo account.");
       setDeleteOpen(false);
+      toast.warning("Cannot delete the demo account.");
       return;
     }
     setDeleting(true);

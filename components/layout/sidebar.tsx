@@ -143,6 +143,7 @@ export function Sidebar({ user, isDemo = false }: SidebarProps) {
               ((e.currentTarget as HTMLElement).style.color = "#334155")
             }
             title="Sign out"
+            aria-label="Sign out"
           >
             <LogOut className="h-4 w-4" />
           </button>

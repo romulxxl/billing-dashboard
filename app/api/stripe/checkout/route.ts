@@ -29,7 +29,15 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  const body = await req.json();
+  let body: unknown;
+  try {
+    body = await req.json();
+  } catch {
+    return NextResponse.json<ApiResponse<null>>(
+      { data: null, error: "Invalid request body" },
+      { status: 400 }
+    );
+  }
   const parsed = checkoutSchema.safeParse(body);
   if (!parsed.success) {
     return NextResponse.json<ApiResponse<null>>(
@@ -82,7 +90,7 @@ export async function POST(req: NextRequest) {
       error: null,
     });
   } catch (err) {
-    console.error("[POST /api/stripe/checkout]", err);
+    console.error("[POST /api/stripe/checkout]", err instanceof Error ? err.message : err);
     return NextResponse.json<ApiResponse<null>>(
       { data: null, error: "Failed to create checkout session" },
       { status: 500 }

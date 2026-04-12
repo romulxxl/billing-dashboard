@@ -69,7 +69,7 @@ export function InvoiceTable({ invoices }: InvoiceTableProps) {
                 <Badge
                   variant={
                     invoice.status === "paid" ? "active"
-                    : invoice.status === "open" ? "trialing"
+                    : invoice.status === "open" ? "past_due"
                     : "canceled"
                   }
                 >

@@ -42,7 +42,7 @@ export async function POST() {
       error: null,
     });
   } catch (err) {
-    console.error("[POST /api/stripe/portal]", err);
+    console.error("[POST /api/stripe/portal]", err instanceof Error ? err.message : err);
     return NextResponse.json<ApiResponse<null>>(
       { data: null, error: "Failed to create portal session" },
       { status: 500 }

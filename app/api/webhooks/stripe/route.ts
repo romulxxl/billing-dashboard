@@ -41,11 +41,16 @@ export async function POST(req: NextRequest) {
           break;
         }
 
-        const priceId = subscription.items.data[0].price.id;
+        const item = subscription.items.data[0];
+        if (!item) {
+          console.error("checkout.session.completed: subscription has no items", subscriptionId);
+          break;
+        }
+        const priceId = item.price.id;
         const plan = getPlanFromPriceId(priceId);
         const interval = getIntervalFromPriceId(priceId);
         // In Stripe v22, current_period_end moved to subscription items
-        const periodEnd = subscription.items.data[0].current_period_end;
+        const periodEnd = item.current_period_end;
 
         await db.subscription.upsert({
           where: { userId },
@@ -86,7 +91,9 @@ export async function POST(req: NextRequest) {
         const userId = subscription.metadata.userId;
         if (!userId) break;
 
-        const periodEnd = subscription.items.data[0].current_period_end;
+        const invoiceItem = subscription.items.data[0];
+        if (!invoiceItem) break;
+        const periodEnd = invoiceItem.current_period_end;
 
         await db.subscription.updateMany({
           where: { stripeSubscriptionId: subscriptionId },
@@ -144,10 +151,12 @@ export async function POST(req: NextRequest) {
 
       case "customer.subscription.updated": {
         const subscription = event.data.object as Stripe.Subscription;
-        const priceId = subscription.items.data[0].price.id;
+        const updatedItem = subscription.items.data[0];
+        if (!updatedItem) break;
+        const priceId = updatedItem.price.id;
         const plan = getPlanFromPriceId(priceId);
         const interval = getIntervalFromPriceId(priceId);
-        const periodEnd = subscription.items.data[0].current_period_end;
+        const periodEnd = updatedItem.current_period_end;
 
         await db.subscription.updateMany({
           where: { stripeSubscriptionId: subscription.id },
@@ -176,7 +185,13 @@ export async function POST(req: NextRequest) {
         console.log(`Unhandled event type: ${event.type}`);
     }
   } catch (err) {
-    console.error(`Error processing webhook ${event.type}:`, err);
+    const message = err instanceof Error ? err.message : "Unknown error";
+    console.error(`Error processing webhook ${event.type}:`, message);
+    // Return 500 so Stripe retries the webhook instead of marking it succeeded
+    return NextResponse.json(
+      { error: "Webhook processing failed" },
+      { status: 500 }
+    );
   }
 
   return NextResponse.json({ received: true });

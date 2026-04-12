@@ -24,7 +24,7 @@ export async function GET() {
       error: null,
     });
   } catch (err) {
-    console.error("[GET /api/subscription]", err);
+    console.error("[GET /api/subscription]", err instanceof Error ? err.message : err);
     return NextResponse.json<ApiResponse<null>>(
       { data: null, error: "Failed to fetch subscription" },
       { status: 500 }

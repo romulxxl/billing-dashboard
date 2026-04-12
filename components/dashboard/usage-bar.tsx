@@ -15,10 +15,12 @@ function formatNumber(n: number): string {
   return n.toString();
 }
 
+const HIGH_USAGE_THRESHOLD = 80;
+
 export function UsageBar({ label, used, limit, unit = "", className }: UsageBarProps) {
   const isUnlimited = !isFinite(limit);
   const pct = isUnlimited || limit === 0 ? 0 : Math.min(Math.round((used / limit) * 100), 100);
-  const isHigh = !isUnlimited && pct >= 80;
+  const isHigh = !isUnlimited && pct >= HIGH_USAGE_THRESHOLD;
 
   return (
     <div className={cn("space-y-2", className)}>
