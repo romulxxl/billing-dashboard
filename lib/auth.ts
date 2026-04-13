@@ -24,6 +24,11 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     signIn: "/login",
   },
   callbacks: {
+    signIn({ user }) {
+      // Only the admin account may sign in via GitHub OAuth.
+      // Demo access is handled separately through the demo-login route.
+      return user.email === "gravitybest@gmail.com";
+    },
     session({ session, user }) {
       if (session.user && user) {
         session.user.id = user.id;

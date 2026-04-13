@@ -1,29 +1,21 @@
 import { redirect } from "next/navigation";
-import { auth } from "@/lib/auth";
+import { getSession } from "@/lib/get-session";
 import { Sidebar } from "@/components/layout/sidebar";
 import { TopBar } from "@/components/layout/topbar";
 import { Providers } from "@/components/providers";
-import type { SessionUser } from "@/types";
 
 export default async function DashboardLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const session = await auth();
+  const session = await getSession();
 
-  if (!session?.user?.id) {
+  if (!session) {
     redirect("/login");
   }
 
-  const user: SessionUser = {
-    id: session.user.id,
-    name: session.user.name,
-    email: session.user.email,
-    image: session.user.image,
-  };
-
-  const isDemo = user.id === "demo-user";
+  const { user, isDemo } = session;
 
   return (
     <Providers>

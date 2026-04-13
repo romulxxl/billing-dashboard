@@ -1,22 +1,21 @@
 import { NextResponse } from "next/server";
-import { auth } from "@/lib/auth";
+import { getSession } from "@/lib/get-session";
 import { stripe } from "@/lib/stripe";
 import { db } from "@/lib/db";
 import { env } from "@/lib/env";
 import type { ApiResponse } from "@/types";
 
 export async function POST() {
-  const session = await auth();
+  const session = await getSession();
 
-  if (!session?.user?.id) {
+  if (!session) {
     return NextResponse.json<ApiResponse<null>>(
       { data: null, error: "Unauthorized" },
       { status: 401 }
     );
   }
 
-  // Block demo user
-  if (session.user.id === "demo-user") {
+  if (session.isDemo) {
     return NextResponse.json<ApiResponse<null>>(
       { data: null, error: "DEMO_MODE" },
       { status: 403 }
@@ -24,7 +23,7 @@ export async function POST() {
   }
 
   try {
-    const user = await db.user.findUnique({ where: { id: session.user.id } });
+    const user = await db.user.findUnique({ where: { id: session.user.id ?? "" } });
     if (!user?.stripeCustomerId) {
       return NextResponse.json<ApiResponse<null>>(
         { data: null, error: "No Stripe customer found" },

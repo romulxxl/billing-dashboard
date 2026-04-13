@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { LayoutDashboard, CreditCard, Settings, LogOut } from "lucide-react";
 import { signOut } from "next-auth/react";
 import { cn, getInitials } from "@/lib/utils";
@@ -21,6 +21,16 @@ interface SidebarProps {
 
 export function Sidebar({ user, isDemo = false }: SidebarProps) {
   const pathname = usePathname();
+  const router = useRouter();
+
+  async function handleSignOut() {
+    if (isDemo) {
+      await fetch("/api/demo-logout", { method: "POST" });
+      router.push("/");
+      return;
+    }
+    signOut({ callbackUrl: "/" });
+  }
 
   return (
     <aside
@@ -133,7 +143,7 @@ export function Sidebar({ user, isDemo = false }: SidebarProps) {
             </p>
           </div>
           <button
-            onClick={() => signOut({ callbackUrl: "/" })}
+            onClick={handleSignOut}
             className="rounded-lg p-1.5 transition-colors"
             style={{ color: "#334155" }}
             onMouseEnter={(e) =>

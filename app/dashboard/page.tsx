@@ -1,5 +1,6 @@
-import { auth } from "@/lib/auth";
+import { getSession } from "@/lib/get-session";
 import { db } from "@/lib/db";
+import { MOCK_SUBSCRIPTION, MOCK_INVOICES } from "@/lib/mock-data";
 import { redirect } from "next/navigation";
 import { DollarSign, CreditCard, Calendar, Zap, ArrowRight } from "lucide-react";
 import Link from "next/link";
@@ -19,17 +20,21 @@ function getGreeting(): string {
 }
 
 export default async function DashboardPage() {
-  const session = await auth();
-  if (!session?.user?.id) redirect("/login");
+  const session = await getSession();
+  if (!session) redirect("/login");
 
-  const [subscription, invoices] = await Promise.all([
-    db.subscription.findUnique({ where: { userId: session.user.id } }),
-    db.invoice.findMany({
-      where: { userId: session.user.id },
-      orderBy: { createdAt: "desc" },
-      take: 3,
-    }),
-  ]);
+  const { user, isDemo } = session;
+
+  const [subscription, invoices] = isDemo
+    ? [MOCK_SUBSCRIPTION, MOCK_INVOICES.slice(0, 3)]
+    : await Promise.all([
+        db.subscription.findUnique({ where: { userId: user.id } }),
+        db.invoice.findMany({
+          where: { userId: user.id },
+          orderBy: { createdAt: "desc" },
+          take: 3,
+        }),
+      ]);
 
   const plan = subscription ? getPlanById(subscription.plan) : null;
 
@@ -54,7 +59,7 @@ export default async function DashboardPage() {
       {/* Header */}
       <div>
         <h1 className="text-2xl font-bold text-zinc-900">
-          {getGreeting()}, {session.user.name?.split(" ")[0] ?? "there"} 👋
+          {getGreeting()}, {user.name?.split(" ")[0] ?? "there"} 👋
         </h1>
         <p className="mt-1 text-sm text-zinc-500">
           Here&apos;s what&apos;s happening with your Synapse account today.

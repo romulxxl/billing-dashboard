@@ -1,5 +1,6 @@
-import { auth } from "@/lib/auth";
+import { getSession } from "@/lib/get-session";
 import { db } from "@/lib/db";
+import { MOCK_SUBSCRIPTION, MOCK_INVOICES } from "@/lib/mock-data";
 import { redirect } from "next/navigation";
 import { CurrentPlanCard } from "@/components/billing/current-plan-card";
 import { PricingSection } from "@/components/landing/pricing-section";
@@ -7,18 +8,20 @@ import { InvoiceTable } from "@/components/dashboard/invoice-table";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 export default async function BillingPage() {
-  const session = await auth();
-  if (!session?.user?.id) redirect("/login");
+  const session = await getSession();
+  if (!session) redirect("/login");
 
-  const isDemo = session.user.id === "demo-user";
+  const { user, isDemo } = session;
 
-  const [subscription, invoices] = await Promise.all([
-    db.subscription.findUnique({ where: { userId: session.user.id } }),
-    db.invoice.findMany({
-      where: { userId: session.user.id },
-      orderBy: { createdAt: "desc" },
-    }),
-  ]);
+  const [subscription, invoices] = isDemo
+    ? [MOCK_SUBSCRIPTION, MOCK_INVOICES]
+    : await Promise.all([
+        db.subscription.findUnique({ where: { userId: user.id } }),
+        db.invoice.findMany({
+          where: { userId: user.id },
+          orderBy: { createdAt: "desc" },
+        }),
+      ]);
 
   return (
     <div className="space-y-8 max-w-5xl mx-auto">
