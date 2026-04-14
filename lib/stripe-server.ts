@@ -5,16 +5,16 @@ import type { PlanId, Interval } from "@/lib/stripe-helpers";
 
 const PRICE_ID_MAP: Record<PlanId, Record<Interval, string>> = {
   starter: {
-    month: env.STRIPE_STARTER_MONTHLY_PRICE_ID,
-    year: env.STRIPE_STARTER_ANNUAL_PRICE_ID,
+    month: env.STRIPE_STARTER_MONTHLY_PRICE_ID ?? "",
+    year: env.STRIPE_STARTER_ANNUAL_PRICE_ID ?? "",
   },
   pro: {
-    month: env.STRIPE_PRO_MONTHLY_PRICE_ID,
-    year: env.STRIPE_PRO_ANNUAL_PRICE_ID,
+    month: env.STRIPE_PRO_MONTHLY_PRICE_ID ?? "",
+    year: env.STRIPE_PRO_ANNUAL_PRICE_ID ?? "",
   },
   enterprise: {
-    month: env.STRIPE_ENTERPRISE_MONTHLY_PRICE_ID,
-    year: env.STRIPE_ENTERPRISE_ANNUAL_PRICE_ID,
+    month: env.STRIPE_ENTERPRISE_MONTHLY_PRICE_ID ?? "",
+    year: env.STRIPE_ENTERPRISE_ANNUAL_PRICE_ID ?? "",
   },
 };
 

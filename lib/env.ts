@@ -13,20 +13,20 @@ const envSchema = z.object({
   GITHUB_CLIENT_SECRET: z.string().optional(),
 
   // Database
-  DATABASE_URL: z.string().min(1),
+  DATABASE_URL: z.string().min(1).default("file:./dev.db"),
 
-  // Stripe
-  STRIPE_SECRET_KEY: z.string().startsWith("sk_"),
-  STRIPE_WEBHOOK_SECRET: z.string().startsWith("whsec_"),
-  NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: z.string().startsWith("pk_"),
+  // Stripe — all optional for demo-only deploys
+  STRIPE_SECRET_KEY: z.string().startsWith("sk_").optional(),
+  STRIPE_WEBHOOK_SECRET: z.string().startsWith("whsec_").optional(),
+  NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: z.string().startsWith("pk_").optional(),
 
-  // Stripe Price IDs
-  STRIPE_STARTER_MONTHLY_PRICE_ID: z.string().min(1),
-  STRIPE_STARTER_ANNUAL_PRICE_ID: z.string().min(1),
-  STRIPE_PRO_MONTHLY_PRICE_ID: z.string().min(1),
-  STRIPE_PRO_ANNUAL_PRICE_ID: z.string().min(1),
-  STRIPE_ENTERPRISE_MONTHLY_PRICE_ID: z.string().min(1),
-  STRIPE_ENTERPRISE_ANNUAL_PRICE_ID: z.string().min(1),
+  // Stripe Price IDs — optional for demo-only deploys
+  STRIPE_STARTER_MONTHLY_PRICE_ID: z.string().optional(),
+  STRIPE_STARTER_ANNUAL_PRICE_ID: z.string().optional(),
+  STRIPE_PRO_MONTHLY_PRICE_ID: z.string().optional(),
+  STRIPE_PRO_ANNUAL_PRICE_ID: z.string().optional(),
+  STRIPE_ENTERPRISE_MONTHLY_PRICE_ID: z.string().optional(),
+  STRIPE_ENTERPRISE_ANNUAL_PRICE_ID: z.string().optional(),
 });
 
 type Env = z.infer<typeof envSchema>;

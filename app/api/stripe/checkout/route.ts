@@ -49,8 +49,15 @@ export async function POST(req: NextRequest) {
   const { planId, interval } = parsed.data;
   const priceId = getPriceId(planId, interval);
 
+  if (!session.user.id) {
+    return NextResponse.json<ApiResponse<null>>(
+      { data: null, error: "Unauthorized" },
+      { status: 401 }
+    );
+  }
+
   try {
-    const user = await db.user.findUnique({ where: { id: session.user.id ?? "" } });
+    const user = await db.user.findUnique({ where: { id: session.user.id } });
     if (!user) {
       return NextResponse.json<ApiResponse<null>>(
         { data: null, error: "User not found" },

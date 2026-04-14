@@ -23,6 +23,20 @@ const globalForPrisma = globalThis as unknown as {
   prisma: ReturnType<typeof createPrismaClient> | undefined;
 };
 
-export const db = globalForPrisma.prisma ?? createPrismaClient();
+function getClient(): ReturnType<typeof createPrismaClient> {
+  if (!globalForPrisma.prisma) {
+    globalForPrisma.prisma = createPrismaClient();
+  }
+  return globalForPrisma.prisma;
+}
 
-if (process.env.NODE_ENV !== "production") globalForPrisma.prisma = db;
+export const db: ReturnType<typeof createPrismaClient> = new Proxy(
+  {} as ReturnType<typeof createPrismaClient>,
+  {
+    get(_t, prop, receiver) {
+      const c = getClient();
+      const v = Reflect.get(c as object, prop, receiver);
+      return typeof v === "function" ? v.bind(c) : v;
+    },
+  }
+);

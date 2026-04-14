@@ -145,7 +145,7 @@ synapse-billing/
 ├── prisma/
 │   ├── schema.prisma      User, Subscription, Invoice, Session models
 │   └── seed.ts            Demo user + 6 months of invoice history
-├── middleware.ts           Route protection (cookie check)
+├── proxy.ts               Route protection (cookie check)
 └── types/index.ts         Shared TypeScript types
 ```
 
@@ -162,10 +162,29 @@ Browser → Middleware (cookie check) → Server Component (auth + DB) → UI
 
 ## Deployment
 
+### Demo-only deploy on Vercel (no database)
+
+The app ships a full in-memory demo mode — no DB or Stripe keys required.
+
 1. Push to GitHub
-2. Import in [Vercel](https://vercel.com)
-3. Add environment variables (use Railway or PlanetScale for production DB)
-4. Add Stripe webhook endpoint: `https://your-app.vercel.app/api/webhooks/stripe`
+2. Import the repo in [Vercel](https://vercel.com)
+3. Add a single environment variable:
+   ```
+   NEXTAUTH_SECRET=<run: openssl rand -base64 32>
+   ```
+4. Deploy — the `/login` page will show only **"Continue as Demo User"**
+
+All Stripe routes return `403 DEMO_MODE` before touching any real API; the Prisma
+client is never instantiated because demo flows never call the DB.
+
+### Full deploy (with real database)
+
+For a production setup with real auth and payments:
+
+1. Provision a hosted SQLite database (e.g. [Turso](https://turso.tech) — free tier available)
+2. Set all variables from `.env.example` in Vercel's Environment Variables UI
+3. Add the Stripe webhook endpoint: `https://your-app.vercel.app/api/webhooks/stripe`
+4. Run `npm run db:migrate` against your production DB URL before first deploy
 
 ---
 

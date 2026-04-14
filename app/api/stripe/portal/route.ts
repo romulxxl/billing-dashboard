@@ -22,8 +22,15 @@ export async function POST() {
     );
   }
 
+  if (!session.user.id) {
+    return NextResponse.json<ApiResponse<null>>(
+      { data: null, error: "Unauthorized" },
+      { status: 401 }
+    );
+  }
+
   try {
-    const user = await db.user.findUnique({ where: { id: session.user.id ?? "" } });
+    const user = await db.user.findUnique({ where: { id: session.user.id } });
     if (!user?.stripeCustomerId) {
       return NextResponse.json<ApiResponse<null>>(
         { data: null, error: "No Stripe customer found" },
