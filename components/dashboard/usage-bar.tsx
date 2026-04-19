@@ -25,8 +25,8 @@ export function UsageBar({ label, used, limit, unit = "", className }: UsageBarP
   return (
     <div className={cn("space-y-2", className)}>
       <div className="flex items-center justify-between text-sm">
-        <span className="font-medium text-zinc-700">{label}</span>
-        <span className="text-zinc-500">
+        <span className="font-medium text-slate-200">{label}</span>
+        <span className="text-slate-300">
           {formatNumber(used)}
           {unit} / {isUnlimited ? "∞" : `${formatNumber(limit)}${unit}`}
         </span>
@@ -35,7 +35,7 @@ export function UsageBar({ label, used, limit, unit = "", className }: UsageBarP
         value={pct}
         className={cn(isHigh && "[&>div]:bg-amber-500")}
       />
-      <p className={cn("text-xs", isHigh ? "text-amber-600" : "text-zinc-400")}>
+      <p className={cn("text-xs", isHigh ? "text-amber-400" : "text-slate-400")}>
         {isUnlimited ? "Unlimited" : `${pct}% used${isHigh ? " — approaching limit" : ""}`}
       </p>
     </div>

@@ -51,7 +51,7 @@ export function TopBar({ user, isDemo = false }: TopBarProps) {
           <button
             onClick={() => setOpen(true)}
             className="rounded-lg p-1.5 transition-colors"
-            style={{ color: "#475569" }}
+            style={{ color: "#94a3b8" }}
           >
             <Menu className="h-5 w-5" />
           </button>
@@ -84,7 +84,7 @@ export function TopBar({ user, isDemo = false }: TopBarProps) {
           <button
             onClick={() => setOpen(false)}
             className="rounded-lg p-1 transition-colors"
-            style={{ color: "#334155" }}
+            style={{ color: "#64748b" }}
           >
             <X className="h-4 w-4" />
           </button>
@@ -110,11 +110,11 @@ export function TopBar({ user, isDemo = false }: TopBarProps) {
                     : {
                         background: "transparent",
                         border: "1px solid transparent",
-                        color: "#334155",
+                        color: "#64748b",
                       }
                 }
               >
-                <Icon className="h-4 w-4 shrink-0" style={{ color: isActive ? "#3b82f6" : "#1e4080" }} />
+                <Icon className="h-4 w-4 shrink-0" style={{ color: isActive ? "#3b82f6" : "#4a7fd4" }} />
                 {label}
               </Link>
             );
@@ -136,12 +136,12 @@ export function TopBar({ user, isDemo = false }: TopBarProps) {
             )}
             <div className="flex-1 min-w-0">
               <p className="truncate text-sm font-medium text-white">{user.name}</p>
-              <p className="truncate text-xs" style={{ color: "#334155" }}>{user.email}</p>
+              <p className="truncate text-xs" style={{ color: "#64748b" }}>{user.email}</p>
             </div>
             <button
               onClick={() => signOut({ callbackUrl: "/" })}
               className="rounded-lg p-1.5"
-              style={{ color: "#334155" }}
+              style={{ color: "#64748b" }}
               aria-label="Sign out"
             >
               <LogOut className="h-4 w-4" />

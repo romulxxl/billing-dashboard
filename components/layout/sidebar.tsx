@@ -84,7 +84,7 @@ export function Sidebar({ user, isDemo = false }: SidebarProps) {
                   : {
                       background: "transparent",
                       border: "1px solid transparent",
-                      color: "#334155",
+                      color: "#64748b",
                     }
               }
               onMouseEnter={(e) => {
@@ -93,12 +93,12 @@ export function Sidebar({ user, isDemo = false }: SidebarProps) {
               }}
               onMouseLeave={(e) => {
                 if (!isActive)
-                  (e.currentTarget as HTMLElement).style.color = "#334155";
+                  (e.currentTarget as HTMLElement).style.color = "#64748b";
               }}
             >
               <Icon
                 className="h-4 w-4 shrink-0"
-                style={{ color: isActive ? "#3b82f6" : "#1e4080" }}
+                style={{ color: isActive ? "#3b82f6" : "#4a7fd4" }}
               />
               {label}
               {isActive && (
@@ -138,19 +138,19 @@ export function Sidebar({ user, isDemo = false }: SidebarProps) {
             <p className="truncate text-sm font-medium text-white">
               {user.name ?? "User"}
             </p>
-            <p className="truncate text-xs" style={{ color: "#334155" }}>
+            <p className="truncate text-xs" style={{ color: "#64748b" }}>
               {user.email ?? ""}
             </p>
           </div>
           <button
             onClick={handleSignOut}
             className="rounded-lg p-1.5 transition-colors"
-            style={{ color: "#334155" }}
+            style={{ color: "#64748b" }}
             onMouseEnter={(e) =>
               ((e.currentTarget as HTMLElement).style.color = "#f87171")
             }
             onMouseLeave={(e) =>
-              ((e.currentTarget as HTMLElement).style.color = "#334155")
+              ((e.currentTarget as HTMLElement).style.color = "#64748b")
             }
             title="Sign out"
             aria-label="Sign out"

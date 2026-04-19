@@ -111,7 +111,7 @@ export function SettingsClient({ user, isDemo }: SettingsClientProps) {
                 disabled
                 className="max-w-sm"
               />
-              <p className="text-xs text-slate-500">
+              <p className="text-xs text-slate-400">
                 {isDemo ? "Read-only in demo mode." : "Managed by your GitHub profile."}
               </p>
             </div>
@@ -125,7 +125,7 @@ export function SettingsClient({ user, isDemo }: SettingsClientProps) {
                 disabled
                 className="max-w-sm"
               />
-              <p className="text-xs text-slate-500">
+              <p className="text-xs text-slate-400">
                 {isDemo ? "Read-only in demo mode." : "Email is read-only for OAuth accounts."}
               </p>
             </div>

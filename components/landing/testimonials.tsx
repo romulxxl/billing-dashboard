@@ -44,7 +44,7 @@ export function Testimonials() {
           <h2 className="text-3xl font-bold tracking-tight text-white sm:text-4xl">
             Loved by engineering teams
           </h2>
-          <p className="mt-4 text-lg" style={{ color: "#475569" }}>
+          <p className="mt-4 text-lg" style={{ color: "#94a3b8" }}>
             Join thousands of teams that ship faster with Synapse.
           </p>
         </div>
@@ -81,7 +81,7 @@ export function Testimonials() {
                 />
                 <div>
                   <p className="font-semibold text-sm text-white">{name}</p>
-                  <p className="text-xs" style={{ color: "#475569" }}>{role}</p>
+                  <p className="text-xs" style={{ color: "#94a3b8" }}>{role}</p>
                 </div>
               </div>
 

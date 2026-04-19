@@ -22,13 +22,13 @@ export default function HomePage() {
         <div className="mx-auto max-w-6xl px-6 py-4 flex items-center justify-between">
           <SynapseLogo />
           <div className="hidden sm:flex items-center gap-8 text-sm">
-            <Link href="#features" className="text-slate-500 hover:text-blue-300 transition-colors">
+            <Link href="#features" className="text-slate-300 hover:text-blue-300 transition-colors">
               Features
             </Link>
-            <Link href="#pricing" className="text-slate-500 hover:text-blue-300 transition-colors">
+            <Link href="#pricing" className="text-slate-300 hover:text-blue-300 transition-colors">
               Pricing
             </Link>
-            <Link href="/login" className="text-slate-500 hover:text-blue-300 transition-colors">
+            <Link href="/login" className="text-slate-300 hover:text-blue-300 transition-colors">
               Sign in
             </Link>
           </div>

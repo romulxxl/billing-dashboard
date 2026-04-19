@@ -69,7 +69,7 @@ export default function LoginForm({ githubEnabled }: { githubEnabled: boolean })
         <div className="mb-8 flex flex-col items-center">
           <SynapseLogo />
           <h1 className="mt-6 text-2xl font-bold text-white">Welcome back</h1>
-          <p className="mt-1 text-sm" style={{ color: "#475569" }}>
+          <p className="mt-1 text-sm" style={{ color: "#94a3b8" }}>
             The analytics platform for modern teams
           </p>
         </div>
@@ -116,7 +116,7 @@ export default function LoginForm({ githubEnabled }: { githubEnabled: boolean })
               {/* Divider */}
               <div className="relative flex items-center">
                 <div className="flex-1 h-px" style={{ background: "rgba(22,48,96,0.6)" }} />
-                <span className="px-3 text-xs" style={{ color: "#1e4080" }}>or</span>
+                <span className="px-3 text-xs" style={{ color: "#64748b" }}>or</span>
                 <div className="flex-1 h-px" style={{ background: "rgba(22,48,96,0.6)" }} />
               </div>
             </>
@@ -146,7 +146,7 @@ export default function LoginForm({ githubEnabled }: { githubEnabled: boolean })
               style={{
                 background: "rgba(37,99,235,0.06)",
                 border: "1px solid rgba(59,130,246,0.15)",
-                color: "#64748b",
+                color: "#94a3b8",
               }}
             >
               <Info className="mt-0.5 h-3.5 w-3.5 shrink-0 text-blue-500" />
@@ -164,12 +164,12 @@ export default function LoginForm({ githubEnabled }: { githubEnabled: boolean })
             </div>
           </div>
 
-          <p className="text-center text-xs" style={{ color: "#1e4080" }}>
+          <p className="text-center text-xs" style={{ color: "#64748b" }}>
             No credit card required for demo
           </p>
         </div>
 
-        <p className="mt-6 text-center text-xs" style={{ color: "#1e4080" }}>
+        <p className="mt-6 text-center text-xs" style={{ color: "#64748b" }}>
           By continuing you agree to our{" "}
           <a href="#" className="text-blue-500 hover:text-blue-400">Terms</a>{" "}
           and{" "}

@@ -77,7 +77,7 @@ function FeatureCard({
         <Icon className="h-5 w-5" style={{ color }} />
       </div>
       <h3 className="mb-2 font-semibold text-white">{title}</h3>
-      <p className="text-sm leading-relaxed text-slate-500">{description}</p>
+      <p className="text-sm leading-relaxed text-slate-300">{description}</p>
 
       {/* Corner accent */}
       <div
@@ -106,7 +106,7 @@ export function Features() {
           <h2 className="text-3xl font-bold tracking-tight text-white sm:text-4xl">
             Everything your team needs
           </h2>
-          <p className="mt-4 text-lg text-slate-500 max-w-2xl mx-auto">
+          <p className="mt-4 text-lg text-slate-300 max-w-2xl mx-auto">
             From startup to enterprise, Synapse scales with you. One platform, every insight.
           </p>
         </div>

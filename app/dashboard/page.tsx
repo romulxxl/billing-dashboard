@@ -58,10 +58,10 @@ export default async function DashboardPage() {
     <div className="space-y-8 max-w-6xl mx-auto">
       {/* Header */}
       <div>
-        <h1 className="text-2xl font-bold text-zinc-900">
+        <h1 className="text-2xl font-bold text-white">
           {getGreeting()}, {user.name?.split(" ")[0] ?? "there"} 👋
         </h1>
-        <p className="mt-1 text-sm text-zinc-500">
+        <p className="mt-1 text-sm text-slate-300">
           Here&apos;s what&apos;s happening with your Synapse account today.
         </p>
       </div>

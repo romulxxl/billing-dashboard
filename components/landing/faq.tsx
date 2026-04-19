@@ -63,7 +63,7 @@ export function FAQ() {
                 <AccordionTrigger className="text-left font-medium text-slate-100 hover:text-blue-300 py-5">
                   {faq.q}
                 </AccordionTrigger>
-                <AccordionContent style={{ color: "#64748b" }}>
+                <AccordionContent style={{ color: "#94a3b8" }}>
                   {faq.a}
                 </AccordionContent>
               </AccordionItem>

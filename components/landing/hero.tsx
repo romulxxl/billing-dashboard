@@ -87,7 +87,7 @@ export function Hero() {
           </Button>
         </div>
 
-        <p className="mt-4 text-sm text-slate-600">
+        <p className="mt-4 text-sm text-slate-400">
           No credit card required · 14-day free trial · Cancel anytime
         </p>
 
@@ -96,14 +96,14 @@ export function Hero() {
           className="mt-20 border-t pt-12"
           style={{ borderColor: "rgba(22,48,96,0.8)" }}
         >
-          <p className="text-xs font-semibold uppercase tracking-widest mb-8 text-navy-500">
+          <p className="text-xs font-semibold uppercase tracking-widest mb-8 text-slate-400">
             Trusted by teams at
           </p>
           <div className="flex flex-wrap items-center justify-center gap-x-10 gap-y-4">
             {["Acme Corp", "Globex", "Initech", "Umbrella", "Hooli"].map((company) => (
               <span
                 key={company}
-                className="text-base font-bold tracking-tight text-navy-500 hover:text-blue-500 transition-colors cursor-default"
+                className="text-base font-bold tracking-tight text-slate-400 hover:text-blue-400 transition-colors cursor-default"
               >
                 {company}
               </span>

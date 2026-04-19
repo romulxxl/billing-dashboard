@@ -36,7 +36,7 @@ export function PricingSection({ currentPlanId, isDemo }: PricingSectionProps) {
           <h2 className="text-3xl font-bold tracking-tight text-white sm:text-4xl">
             Simple, transparent pricing
           </h2>
-          <p className="mt-4 text-lg" style={{ color: "#475569" }}>
+          <p className="mt-4 text-lg" style={{ color: "#94a3b8" }}>
             No hidden fees. Cancel anytime.
           </p>
           <div className="mt-8 flex justify-center">

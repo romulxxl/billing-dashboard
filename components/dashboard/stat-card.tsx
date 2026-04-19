@@ -23,7 +23,7 @@ export function StatCard({ title, value, description, icon: Icon, trend, classNa
       }}
     >
       <div className="flex items-center justify-between mb-4">
-        <p className="text-xs font-semibold uppercase tracking-widest" style={{ color: "#334155" }}>
+        <p className="text-xs font-semibold uppercase tracking-widest" style={{ color: "#64748b" }}>
           {title}
         </p>
         <div
@@ -36,7 +36,7 @@ export function StatCard({ title, value, description, icon: Icon, trend, classNa
 
       <p className="text-2xl font-bold text-white tracking-tight">{value}</p>
       {description && (
-        <p className="mt-1 text-xs" style={{ color: "#334155" }}>{description}</p>
+        <p className="mt-1 text-xs" style={{ color: "#64748b" }}>{description}</p>
       )}
       {trend && (
         <div
