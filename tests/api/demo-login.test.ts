@@ -1,36 +1,22 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 
-vi.mock("@/lib/db", () => ({
-  db: {
-    user: { findUnique: vi.fn() },
-    session: { create: vi.fn() },
-  },
+vi.mock("@/lib/demo-session", () => ({
+  DEMO_COOKIE_NAME: "synapse-demo-token",
+  createDemoToken: vi.fn(),
 }));
 
-import { db } from "@/lib/db";
+import { createDemoToken } from "@/lib/demo-session";
 import { POST } from "@/app/api/demo-login/route";
 
-const mockUserFind = db.user.findUnique as ReturnType<typeof vi.fn>;
-const mockSessionCreate = db.session.create as ReturnType<typeof vi.fn>;
-
-const demoUser = { id: "demo-user", email: "demo@example.com", name: "Demo" };
+const mockCreateDemoToken = createDemoToken as ReturnType<typeof vi.fn>;
 
 beforeEach(() => {
   vi.clearAllMocks();
 });
 
 describe("POST /api/demo-login", () => {
-  it("returns 404 when demo user not seeded", async () => {
-    mockUserFind.mockResolvedValue(null);
-    const res = await POST();
-    expect(res.status).toBe(404);
-    const json = await res.json();
-    expect(json.error).toMatch(/Demo user not found/);
-  });
-
   it("returns 200 on success", async () => {
-    mockUserFind.mockResolvedValue(demoUser);
-    mockSessionCreate.mockResolvedValue({});
+    mockCreateDemoToken.mockResolvedValue("fake.jwt.token");
     const res = await POST();
     expect(res.status).toBe(200);
     const json = await res.json();
@@ -38,31 +24,18 @@ describe("POST /api/demo-login", () => {
     expect(json.error).toBeNull();
   });
 
-  it("sets authjs.session-token cookie on success", async () => {
-    mockUserFind.mockResolvedValue(demoUser);
-    mockSessionCreate.mockResolvedValue({});
+  it("sets synapse-demo-token cookie on success", async () => {
+    mockCreateDemoToken.mockResolvedValue("fake.jwt.token");
     const res = await POST();
     const cookieHeader = res.headers.get("set-cookie");
-    expect(cookieHeader).toContain("authjs.session-token");
+    expect(cookieHeader).toContain("synapse-demo-token");
   });
 
-  it("returns 500 when session create fails", async () => {
-    mockUserFind.mockResolvedValue(demoUser);
-    mockSessionCreate.mockRejectedValue(new Error("DB error"));
+  it("returns 500 when createDemoToken throws", async () => {
+    mockCreateDemoToken.mockRejectedValue(new Error("NEXTAUTH_SECRET is not configured"));
     const res = await POST();
     expect(res.status).toBe(500);
     const json = await res.json();
     expect(json.error).toBe("Failed to create demo session");
-  });
-
-  it("creates session with demo-user id", async () => {
-    mockUserFind.mockResolvedValue(demoUser);
-    mockSessionCreate.mockResolvedValue({});
-    await POST();
-    expect(mockSessionCreate).toHaveBeenCalledWith(
-      expect.objectContaining({
-        data: expect.objectContaining({ userId: "demo-user" }),
-      })
-    );
   });
 });

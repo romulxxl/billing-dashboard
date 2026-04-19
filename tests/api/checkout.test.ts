@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { NextRequest } from "next/server";
 
-vi.mock("@/lib/auth", () => ({ auth: vi.fn() }));
+vi.mock("@/lib/get-session", () => ({ getSession: vi.fn() }));
 vi.mock("@/lib/db", () => ({
   db: { user: { findUnique: vi.fn(), update: vi.fn() } },
 }));
@@ -25,12 +25,12 @@ vi.mock("@/lib/env", () => ({
   },
 }));
 
-import { auth } from "@/lib/auth";
+import { getSession } from "@/lib/get-session";
 import { db } from "@/lib/db";
 import { stripe } from "@/lib/stripe";
 import { POST } from "@/app/api/stripe/checkout/route";
 
-const mockAuth = auth as ReturnType<typeof vi.fn>;
+const mockGetSession = getSession as ReturnType<typeof vi.fn>;
 const mockUserFind = db.user.findUnique as ReturnType<typeof vi.fn>;
 const mockUserUpdate = db.user.update as ReturnType<typeof vi.fn>;
 const mockCustomerCreate = stripe.customers.create as ReturnType<typeof vi.fn>;
@@ -50,13 +50,13 @@ beforeEach(() => {
 
 describe("POST /api/stripe/checkout", () => {
   it("returns 401 when unauthenticated", async () => {
-    mockAuth.mockResolvedValue(null);
+    mockGetSession.mockResolvedValue(null);
     const res = await POST(makeRequest({ planId: "pro", interval: "month" }));
     expect(res.status).toBe(401);
   });
 
   it("returns 403 for demo user", async () => {
-    mockAuth.mockResolvedValue({ user: { id: "demo-user" } });
+    mockGetSession.mockResolvedValue({ user: { id: "demo-user" }, isDemo: true });
     const res = await POST(makeRequest({ planId: "pro", interval: "month" }));
     expect(res.status).toBe(403);
     const json = await res.json();
@@ -64,19 +64,19 @@ describe("POST /api/stripe/checkout", () => {
   });
 
   it("returns 400 for invalid planId", async () => {
-    mockAuth.mockResolvedValue({ user: { id: "user_1" } });
+    mockGetSession.mockResolvedValue({ user: { id: "user_1" }, isDemo: false });
     const res = await POST(makeRequest({ planId: "invalid", interval: "month" }));
     expect(res.status).toBe(400);
   });
 
   it("returns 400 for invalid interval", async () => {
-    mockAuth.mockResolvedValue({ user: { id: "user_1" } });
+    mockGetSession.mockResolvedValue({ user: { id: "user_1" }, isDemo: false });
     const res = await POST(makeRequest({ planId: "pro", interval: "weekly" }));
     expect(res.status).toBe(400);
   });
 
   it("returns 400 for malformed body", async () => {
-    mockAuth.mockResolvedValue({ user: { id: "user_1" } });
+    mockGetSession.mockResolvedValue({ user: { id: "user_1" }, isDemo: false });
     const req = new NextRequest("http://localhost/api/stripe/checkout", {
       method: "POST",
       body: "not json",
@@ -86,14 +86,14 @@ describe("POST /api/stripe/checkout", () => {
   });
 
   it("returns 404 when user not in DB", async () => {
-    mockAuth.mockResolvedValue({ user: { id: "user_1" } });
+    mockGetSession.mockResolvedValue({ user: { id: "user_1" }, isDemo: false });
     mockUserFind.mockResolvedValue(null);
     const res = await POST(makeRequest({ planId: "pro", interval: "month" }));
     expect(res.status).toBe(404);
   });
 
   it("creates Stripe customer when none exists", async () => {
-    mockAuth.mockResolvedValue({ user: { id: "user_1" } });
+    mockGetSession.mockResolvedValue({ user: { id: "user_1" }, isDemo: false });
     mockUserFind.mockResolvedValue({ id: "user_1", email: "u@ex.com", name: "U", stripeCustomerId: null });
     mockUserUpdate.mockResolvedValue({});
     mockCustomerCreate.mockResolvedValue({ id: "cus_new" });
@@ -104,7 +104,7 @@ describe("POST /api/stripe/checkout", () => {
   });
 
   it("reuses existing Stripe customer", async () => {
-    mockAuth.mockResolvedValue({ user: { id: "user_1" } });
+    mockGetSession.mockResolvedValue({ user: { id: "user_1" }, isDemo: false });
     mockUserFind.mockResolvedValue({ id: "user_1", email: "u@ex.com", name: "U", stripeCustomerId: "cus_existing" });
     mockSessionCreate.mockResolvedValue({ url: "https://checkout.stripe.com/pay/test" });
     const res = await POST(makeRequest({ planId: "starter", interval: "year" }));
@@ -113,7 +113,7 @@ describe("POST /api/stripe/checkout", () => {
   });
 
   it("returns checkout URL on success", async () => {
-    mockAuth.mockResolvedValue({ user: { id: "user_1" } });
+    mockGetSession.mockResolvedValue({ user: { id: "user_1" }, isDemo: false });
     mockUserFind.mockResolvedValue({ id: "user_1", email: "u@ex.com", name: "U", stripeCustomerId: "cus_1" });
     mockSessionCreate.mockResolvedValue({ url: "https://checkout.stripe.com/pay/test" });
     const res = await POST(makeRequest({ planId: "enterprise", interval: "month" }));
@@ -122,7 +122,7 @@ describe("POST /api/stripe/checkout", () => {
   });
 
   it("returns 500 when Stripe returns no URL", async () => {
-    mockAuth.mockResolvedValue({ user: { id: "user_1" } });
+    mockGetSession.mockResolvedValue({ user: { id: "user_1" }, isDemo: false });
     mockUserFind.mockResolvedValue({ id: "user_1", stripeCustomerId: "cus_1" });
     mockSessionCreate.mockResolvedValue({ url: null });
     const res = await POST(makeRequest({ planId: "pro", interval: "month" }));
