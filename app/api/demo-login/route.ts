@@ -10,9 +10,10 @@ export async function POST() {
   try {
     token = await createDemoToken();
   } catch (err) {
-    console.error("[POST /api/demo-login]", err instanceof Error ? err.message : err);
+    const detail = err instanceof Error ? err.message : String(err);
+    console.error("[POST /api/demo-login]", detail);
     return NextResponse.json(
-      { data: null, error: "Failed to create demo session" },
+      { data: null, error: detail },
       { status: 500 }
     );
   }
