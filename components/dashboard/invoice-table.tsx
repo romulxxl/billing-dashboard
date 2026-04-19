@@ -20,8 +20,8 @@ export function InvoiceTable({ invoices }: InvoiceTableProps) {
         >
           <FileText className="h-8 w-8" style={{ color: "#1e4080" }} />
         </div>
-        <p className="text-sm font-medium" style={{ color: "#475569" }}>No invoices yet</p>
-        <p className="mt-1 text-xs" style={{ color: "#334155" }}>
+        <p className="text-sm font-medium" style={{ color: "#94a3b8" }}>No invoices yet</p>
+        <p className="mt-1 text-xs" style={{ color: "#64748b" }}>
           Invoices will appear here after your first payment.
         </p>
       </div>
@@ -40,7 +40,7 @@ export function InvoiceTable({ invoices }: InvoiceTableProps) {
               <th
                 key={h}
                 className={`px-4 py-3 text-left text-xs font-semibold uppercase tracking-widest ${h === "" ? "text-right" : ""}`}
-                style={{ color: "#1e4080" }}
+                style={{ color: "#64748b" }}
               >
                 {h}
               </th>
@@ -59,7 +59,7 @@ export function InvoiceTable({ invoices }: InvoiceTableProps) {
               <td className="px-4 py-3 font-medium text-white">
                 {invoice.description ?? "Subscription payment"}
               </td>
-              <td className="px-4 py-3" style={{ color: "#475569" }}>
+              <td className="px-4 py-3" style={{ color: "#94a3b8" }}>
                 {formatDate(invoice.createdAt)}
               </td>
               <td className="px-4 py-3 font-semibold" style={{ color: "#93c5fd" }}>

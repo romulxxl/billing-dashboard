@@ -70,14 +70,14 @@ export function PlanCard({ plan, interval, currentPlanId, isDemo }: PlanCardProp
         >
           <div className="mb-5 mt-3">
             <h3 className="text-lg font-bold text-white">{plan.name}</h3>
-            <p className="mt-1 text-sm" style={{ color: "#64748b" }}>{plan.description}</p>
+            <p className="mt-1 text-sm" style={{ color: "#94a3b8" }}>{plan.description}</p>
           </div>
 
           <div className="mb-6">
             <span className="text-4xl font-extrabold text-white">
               {formatCurrency(price, "usd")}
             </span>
-            <span className="text-sm" style={{ color: "#64748b" }}>
+            <span className="text-sm" style={{ color: "#94a3b8" }}>
               /{interval === "month" ? "mo" : "yr"}
             </span>
             {interval === "year" && (
@@ -136,14 +136,14 @@ export function PlanCard({ plan, interval, currentPlanId, isDemo }: PlanCardProp
     >
       <div className="mb-5">
         <h3 className="text-lg font-bold text-white">{plan.name}</h3>
-        <p className="mt-1 text-sm" style={{ color: "#64748b" }}>{plan.description}</p>
+        <p className="mt-1 text-sm" style={{ color: "#94a3b8" }}>{plan.description}</p>
       </div>
 
       <div className="mb-6">
         <span className="text-4xl font-extrabold text-white">
           {formatCurrency(price, "usd")}
         </span>
-        <span className="text-sm" style={{ color: "#64748b" }}>
+        <span className="text-sm" style={{ color: "#94a3b8" }}>
           /{interval === "month" ? "mo" : "yr"}
         </span>
         {interval === "year" && (
@@ -162,7 +162,7 @@ export function PlanCard({ plan, interval, currentPlanId, isDemo }: PlanCardProp
             >
               <Check className="h-3 w-3 text-blue-400" />
             </div>
-            <span style={{ color: "#64748b" }}>{feature}</span>
+            <span style={{ color: "#94a3b8" }}>{feature}</span>
           </li>
         ))}
       </ul>

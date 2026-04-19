@@ -13,7 +13,7 @@ export function PricingToggle({ value, onChange }: PricingToggleProps) {
       <button
         onClick={() => onChange("month")}
         className="text-sm font-semibold transition-colors"
-        style={{ color: value === "month" ? "#e1eefe" : "#334155" }}
+        style={{ color: value === "month" ? "#e1eefe" : "#64748b" }}
       >
         Monthly
       </button>
@@ -39,7 +39,7 @@ export function PricingToggle({ value, onChange }: PricingToggleProps) {
       <button
         onClick={() => onChange("year")}
         className="flex items-center gap-1.5 text-sm font-semibold transition-colors"
-        style={{ color: value === "year" ? "#e1eefe" : "#334155" }}
+        style={{ color: value === "year" ? "#e1eefe" : "#64748b" }}
       >
         Annual
         <span

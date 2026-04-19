@@ -52,7 +52,7 @@ export function CurrentPlanCard({
       <CardHeader className="flex flex-row items-start justify-between">
         <div>
           <CardTitle>Current Plan</CardTitle>
-          <p className="mt-1 text-sm text-zinc-500">
+          <p className="mt-1 text-sm text-slate-300">
             Manage your active subscription
           </p>
         </div>
@@ -61,27 +61,27 @@ export function CurrentPlanCard({
       <CardContent className="space-y-4">
         <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
           <div>
-            <p className="text-xs text-zinc-500">Plan</p>
-            <p className="mt-1 font-semibold capitalize text-zinc-900">
+            <p className="text-xs text-slate-400">Plan</p>
+            <p className="mt-1 font-semibold capitalize text-slate-50">
               {plan?.name ?? subscription.plan}
             </p>
           </div>
           <div>
-            <p className="text-xs text-zinc-500">Billing</p>
-            <p className="mt-1 font-semibold capitalize text-zinc-900">
+            <p className="text-xs text-slate-400">Billing</p>
+            <p className="mt-1 font-semibold capitalize text-slate-50">
               {subscription.interval === "month" ? "Monthly" : "Annual"}
             </p>
           </div>
           <div>
-            <p className="text-xs text-zinc-500">Amount</p>
-            <p className="mt-1 font-semibold text-zinc-900">
+            <p className="text-xs text-slate-400">Amount</p>
+            <p className="mt-1 font-semibold text-slate-50">
               {formatCurrency(monthlyPrice)}/
               {subscription.interval === "month" ? "mo" : "yr"}
             </p>
           </div>
           <div>
-            <p className="text-xs text-zinc-500">Next billing</p>
-            <p className="mt-1 font-semibold text-zinc-900">
+            <p className="text-xs text-slate-400">Next billing</p>
+            <p className="mt-1 font-semibold text-slate-50">
               {formatDate(subscription.stripeCurrentPeriodEnd)}
             </p>
           </div>

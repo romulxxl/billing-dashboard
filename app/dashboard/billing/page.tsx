@@ -26,8 +26,8 @@ export default async function BillingPage() {
   return (
     <div className="space-y-8 max-w-5xl mx-auto">
       <div>
-        <h1 className="text-2xl font-bold text-zinc-900">Billing</h1>
-        <p className="mt-1 text-sm text-zinc-500">
+        <h1 className="text-2xl font-bold text-white">Billing</h1>
+        <p className="mt-1 text-sm text-slate-300">
           Manage your subscription and view invoice history.
         </p>
       </div>
@@ -46,7 +46,7 @@ export default async function BillingPage() {
 
       {/* Plan comparison / upgrade */}
       <div>
-        <h2 className="text-lg font-semibold text-zinc-900 mb-4">
+        <h2 className="text-lg font-semibold text-white mb-4">
           {subscription ? "Change plan" : "Choose a plan"}
         </h2>
         <PricingSection currentPlanId={subscription?.plan} isDemo={isDemo} />
